@@ -5,6 +5,8 @@ app = Flask(__name__)
 
 @app.route("/render")
 def render():
+    print("📥 Request received for /render")  # <== this is the key debug line
+
     try:
         url  = request.args.get("url")
         page = request.args.get("page", type=int, default=1) - 1
