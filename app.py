@@ -1,3 +1,8 @@
+import io, os, requests, fitz  # PyMuPDF is imported as fitz
+from flask import Flask, request, send_file, abort
+
+app = Flask(__name__)
+
 @app.route("/render")
 def render():
     try:
@@ -8,7 +13,7 @@ def render():
 
         print(f"Fetching PDF from: {url}")
         response = requests.get(url, timeout=30)
-        response.raise_for_status()  # will throw for 4xx or 5xx errors
+        response.raise_for_status()  # throw for 4xx or 5xx errors
 
         pdf_bytes = response.content
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
@@ -16,9 +21,14 @@ def render():
             return abort(400, f"PDF has only {doc.page_count} pages")
 
         pix = doc.load_page(page).get_pixmap(dpi=300)
-        buf = io.BytesIO(pix.tobytes("png")); buf.seek(0)
+        buf = io.BytesIO(pix.tobytes("png"))
+        buf.seek(0)
         return send_file(buf, mimetype="image/png")
 
     except Exception as e:
         print("ERROR:", str(e))
         return abort(500, f"Internal server error: {str(e)}")
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 8080)), debug=True)
