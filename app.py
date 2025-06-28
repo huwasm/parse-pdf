@@ -3,6 +3,11 @@ from flask import Flask, request, send_file, abort
 
 app = Flask(__name__)
 
+@app.route("/ping")
+def ping():
+    print("✅ /ping was hit")
+    return "pong"
+
 @app.route("/render")
 def render():
     print("📥 Request received for /render")  # <== this is the key debug line
