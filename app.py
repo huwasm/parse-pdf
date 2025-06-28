@@ -24,10 +24,12 @@ def render():
 
         pdf_bytes = response.content
         doc = fitz.open(stream=pdf_bytes, filetype="pdf")
+        print(f"✅ PDF opened, pages: {doc.page_count}")
         if page >= doc.page_count:
             return abort(400, f"PDF has only {doc.page_count} pages")
 
         pix = doc.load_page(page).get_pixmap(dpi=300)
+        print(f"✅ Pixmap created, size: {pix.width}x{pix.height}, bytes: {len(pix.samples)}")
         buf = io.BytesIO(pix.tobytes("png"))
         buf.seek(0)
         return send_file(buf, mimetype="image/png")
