@@ -11,4 +11,4 @@ COPY app.py .
 
 ENV PYTHONUNBUFFERED=1
 ENV PORT 8080
-CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "--log-level=debug", "app:app"]

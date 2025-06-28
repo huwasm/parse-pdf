@@ -28,7 +28,7 @@ def render():
         if page >= doc.page_count:
             return abort(400, f"PDF has only {doc.page_count} pages")
 
-        pix = doc.load_page(page).get_pixmap(dpi=300)
+        pix = doc.load_page(page).get_pixmap(dpi=96)
         print(f"✅ Pixmap created, size: {pix.width}x{pix.height}, bytes: {len(pix.samples)}")
         buf = io.BytesIO(pix.tobytes("png"))
         buf.seek(0)
