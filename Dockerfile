@@ -9,5 +9,6 @@ RUN pip install --no-cache-dir flask pymupdf pillow requests gunicorn
 WORKDIR /app
 COPY app.py .
 
+ENV PYTHONUNBUFFERED=1
 ENV PORT 8080
 CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "app:app"]
