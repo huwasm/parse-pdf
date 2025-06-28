@@ -4,10 +4,10 @@ RUN apt-get update \
  && apt-get install -y libmupdf-dev fonts-freefont-ttf \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir flask pymupdf pillow requests
+RUN pip install --no-cache-dir flask pymupdf pillow requests gunicorn
 
 WORKDIR /app
 COPY app.py .
 
 ENV PORT 8080
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "1", "app:app"]
